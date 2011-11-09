@@ -253,9 +253,10 @@ class Driver < Msf::Ui::Driver
 		bname << "_" + Digest::MD5.hexdigest(ftype)
 		
 		fname = ::File.join(@junit_output_path, "#{bname}.xml")
-		while ::File.exist?( fname )
-			bname << "Z"
-			fname = ::File.join(@junit_output_path, "#{bname}.xml")
+		cnt   = 0
+		while ::File.exists?( fname )
+			cnt  += 1
+			fname = ::File.join(@junit_output_path, "#{bname}_#{cnt}.xml")
 		end 
 		
 		::File.open(fname, "w") do |fd|
