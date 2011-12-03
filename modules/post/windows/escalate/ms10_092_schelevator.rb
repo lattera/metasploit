@@ -352,7 +352,7 @@ class Metasploit3 < Msf::Post
 		success = false
 		lns.each_line { |ln|
 			ln.chomp!
-			if ln =~ /^SCHELEVATOR$/
+			if ln =~ /^SUCCESS\:\s/
 				success = true
 				print_status(ln)
 			else
