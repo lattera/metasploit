@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
-# $Id: msfvenom 14909 2012-03-10 06:50:03Z rapid7 $
-# $Revision: 14909 $
+# $Id$
+# $Revision$
 #
 msfbase = __FILE__
 while File.symlink?(msfbase)

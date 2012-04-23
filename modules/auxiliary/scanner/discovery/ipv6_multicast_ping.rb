@@ -1,5 +1,5 @@
 ##
-# $Id: ipv6_multicast_ping.rb 13962 2011-10-17 02:42:01Z todb $
+# $Id$
 ##
 
 require 'msf/core'
@@ -13,7 +13,7 @@ class Metasploit3 < Msf::Auxiliary
 	def initialize
 		super(
 		'Name'        => 'IPv6 Link Local/Node Local Ping Discovery',
-		'Version'     => '$Revision: 13962 $',
+		'Version'     => '$Revision$',
 		'Description' => %q{
 				Send a ICMPv6 ping request to all default multicast addresses, and wait to see who responds.
 		},
